@@ -187,5 +187,29 @@ SELECT emp.employee_id,
 FROM employees emp, employees man
 WHERE emp.manager_id = man.employee_id (+);
 
+-------------------
+---------연습 문제 1.
+SELECT employee_id,
+    first_name,
+    last_name,
+    department_name
+FROM employees emp,
+    departments dept
+WHERE emp.department_id = dept.department_id    
+ORDER BY dept.department_name ASC,
+        emp.employee_id DESC;
+
+------- 연습 문제 2.
+SELECT employee_id,
+    first_name,
+    salary,
+    department_name
+FROM employees emp,
+    departments dept,
+    job_history jo
+WHERE emp.department_id = dept.department_id AND
+    dept.department_id = jo.department_id
+ORDER BY jo.employee_id ASC;
+    
     
     
