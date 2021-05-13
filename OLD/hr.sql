@@ -203,3 +203,97 @@ FROM dual;
 -- 현재 날짜 기준, 입사한지 몇개월 지났는가?
 --SELECT first_name, hire_date, 
 --(MOTMONTHS_BETWWEN(sysdate, hire_date))
+
+----------------
+-- 변환 함수
+---------------
+
+--TO_NUMBER(s, frm) :  문자형 -> 수치형
+--TO_DATE(s, frm) : 문자형 -> 날짜형
+--TO_CHAR(o, fmt) : 숫자, 날짜 -> 문자형
+
+--TO_CHAR
+SELECT first_name, hire_date, TO_CHAR(hire_date, 'YYYY-MM-DD HH24:MI:SS')
+FROM employees;
+
+--현재 날짜의 포멧
+SELECT sysdate, TO_CHAR(sysdate, 'YYYY-MM-DD HH24:MI:SS')
+FROM dual;
+
+SELECT TO_CHAR(123456789.0123, '999,999,999.99')
+FROM dual;
+
+-- 연봉 정보를 문자열로 포매팅
+SELECT first_name, TO_CHAR(salary * 12, '999,999.99') SAL
+FROM employees;
+
+-- TO_NUMBER :  문자열 -> 숫자
+SELECT TO_NUMBER('1,999', '999,999'), TO_NUMBER('$1,350.99', '$999,999.99')
+FROM dual;
+
+-- TO_DATE : 문자열 -> 날짜
+--SELECT TO_DATE('2021-05-05 15:30', YYYY-MM-DD HH24:MI')
+--FROM dual;
+
+--Date 연산
+--Date +(-) Number : 날짜에 일수 더한다(뺀다) -> Date
+
+
+SELECT TO_CHAR(sysdate, 'YY/MM/DD HH24:MI'),
+    sysdate + 1,
+    sysdate - 1,
+    sysdate - TO_DATE('2012-09-24', 'YYYY-MM-DD'),
+    TO_CHAR(sysdate + 13 / 24, 'YY/MM/DD HH24:MI')
+FROM dual;    
+
+-------------------
+-- NULL 관련 함수
+-------------------
+
+--nvl 함수
+SELECT first_name, salary, commission_pct,
+    salary + (salary * commission_pct)
+FROM employees;
+
+
+-- nvl2 함수
+-- nvl2(표현식, null이 아닐때의 식, null일떄의 식)
+SELECT first_name,
+    salary,
+    commission_pct,
+    salary + nvl2(commission_pct, salary * commission_pct, 0)
+FROM employees;    
+
+-- case 함수
+-- 보너스를 지급하기로 했습니다.
+-- AD 관련 직원에게는 20%, SA 관련 직원에게는 10%, IT 관련 직원 8%
+-- 나머지에게는 5%의 보너스 지급
+SELECT first_name, job_id, salary, SUBSTR(job_id, 1, 2),
+    CASE SUBSTR(job_id, 1, 2) WHEN 'AD' THEN salary * 0.2
+                                WHEN 'SA' THEN salary *0.1
+                                WHEN 'IT' THEN salary*0.08
+                                ELSE salary*0.05
+    END as bonus                            
+FROM employees;
+
+-- Decode
+SELECT first_name, Job_id, salary, SUBSTR(job_id, 1, 2),
+    DECODE(SUBSTR(job_id, 1, 2),
+    'AD', salary * 0.2,
+    'SA', salary * 0.1,
+    'IT', salary * 0.08,
+    salary * 0.05) as bonus
+FROM employees;
+
+-- 연습 문제
+-- department_id <= 30 -> A-group
+-- department_id <= 50 -> B-group
+-- department_id <= 100 -> c-group
+SELECT first_name, department_id,
+    CASE WHEN department_id <= 30 THEN 'A-group'
+        WHEN department_id <= 50 THEN 'B-group'
+        WHEN department_id <= 100 THEN 'C-group'
+        ELSE 'REMAINDER'
+    END as team
+FROM employees
+ORDER BY team;
