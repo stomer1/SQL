@@ -515,3 +515,11 @@ FROM employees emp LEFT OUTER JOIN employees man
 START WITH emp.manager_id IS NULL
 CONNECT BY PRIOR emp.employee_id = emp.manager_id
 ORDER BY level;
+
+------------- 연습문제 집계(통계) SQL 문제 1.
+SELECT COUNT(employee_id) FROM employees
+WHERE manager_id IS NOT NULL;
+-----------------문제2.
+SELECT MIN(salary) "최저임금" , MAX(salary) "최고임금"
+FROM employees;
+WHERE salary = (MIN(salary) - MAX(salary));
