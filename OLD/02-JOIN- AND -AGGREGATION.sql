@@ -200,16 +200,32 @@ ORDER BY dept.department_name ASC,
         emp.employee_id DESC;
 
 ------- 연습 문제 2.
---SELECT employee_id,
---   first_name,
---    salary,
---    department_name
---FROM employees emp,
---    departments dept,
---    job_history jo
---WHERE emp.department_id = dept.department_id AND
---    dept.department_id = jo.department_id
---ORDER BY employee_id ASC;
+SELECT emp.employee_id,
+   emp.first_name,
+    emp.salary,
+    dept.department_name,
+    jo.job_title
+FROM employees emp,
+    departments dept,
+    jobs jo
+WHERE emp.department_id = dept.department_id AND
+   emp.job_id = jo.job_id
+ORDER BY emp.employee_id ASC;
+-----------문제 2-1.
+SELECT emp.employee_id,
+   emp.first_name,
+    emp.salary,
+    dept.department_name,
+    jo.job_title
+FROM employees emp,
+    departments dept,
+    jobs jo
+WHERE emp.department_id = dept.department_id(+) AND
+   emp.job_id = jo.job_id
+ORDER BY emp.employee_id ASC;
+--------------문제 3.
+
+
     
 ------------------------
 --AGGREGATION
@@ -541,9 +557,38 @@ GROUP BY job_id
     HAVING ROUND(MIN(salary), 1) > 2500
 ORDER BY ROUND(AVG(salary), 0), ROUND(MIN(salary), 1) DESC; 
 -------------문제 6.
-SELECT employee_id, hire_date, TO_CHAR(hire_date, 'YYYY-MM-DD')
+SELECT employee_id, hire_date, TO_CHAR(hire_date, 'YYYY-MM-DD DAY')                           
 FROM employees
 WHERE hire_date = (SELECT MIN(hire_date) FROM employees);
-
-
-
+--------------문제 7.
+SELECT department_id, MIN(salary), AVG(salary),
+    AVG(salary) - MIN(salary) 
+FROM employees
+GROUP BY department_id
+    HAVING AVG(salary) - MIN(salary) <2000
+ORDER BY AVG(salary) - MIN(salary) DESC;
+-------------문제 8.
+SELECT job_id,
+    MAX(salary) - MIN(salary) diff_salary
+FROM employees
+GROUP BY job_id 
+ORDER BY diff_salary DESC;
+------------문제 9.
+SELECT manager_id, ROUND(AVG(salary), 0),
+    MAX(salary), MIN(salary)
+FROM employees
+WHERE hire_date > '05/01/01'
+GROUP BY manager_id
+    HAVING AVG(salary) >= 5000
+ORDER BY AVG(salary);
+------------문제 10.
+SELECT employee_id,
+    CASE WHEN hire_date <= '02/12/31' THEN '창립맴버'
+        WHEN hire_date <= '03/12/31' THEN '03입사'
+        WHEN hire_date <= '04/12/31' THEN '04입사'
+        WHEN hire_date > '04/12/31' THEN '상장이후입사'
+     END optDate,
+      hire_date
+FROM employees
+ORDER BY hire_date ASC;
+    
