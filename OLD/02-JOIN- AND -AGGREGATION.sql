@@ -461,7 +461,7 @@ SELECT first_name, salary, hire_date
 FROM employees
 WHERE salary > 12000; -- 12000 초과한 급여 받는 사원 (8명)
 
--- 입사일이 '05/0101'이전 이거나 (OR) 급여 > 12000 -> 합집합
+-- 입사일이 '05/01/01'이전 이거나 (OR) 급여 > 12000 -> 합집합
 SELECT first_name, salary, hire_date
 FROM employees
 WHERE hire_date < '05/01/01' -- 2005년 01월 01일 이전 입사자 (24명)
@@ -520,6 +520,30 @@ ORDER BY level;
 SELECT COUNT(employee_id) FROM employees
 WHERE manager_id IS NOT NULL;
 -----------------문제2.
-SELECT MIN(salary) "최저임금" , MAX(salary) "최고임금"
+SELECT MIN(salary) "최저임금" , MAX(salary) "최고임금",
+    MAX(salary)-MIN(salary) "최고임금 - 최저임금" 
 FROM employees;
-WHERE salary = (MIN(salary) - MAX(salary));
+---------------문제3.
+SELECT employee_id, hire_date, TO_CHAR(hire_date, 'YYYY-MM-DD')
+FROM employees
+WHERE hire_date = (SELECT MAX(hire_date) FROM employees);
+--------------문제4.
+SELECT department_id, ROUND(AVG(salary), 0) "평균임금",
+        ROUND(MAX(salary), 1) "최고임금", ROUND(MIN(salary), 1) "최저임금"
+FROM employees
+GROUP BY department_id
+ORDER BY department_id DESC;
+--------------문제5.
+SELECT job_id, ROUND(AVG(salary), 0) "평균임금",
+        ROUND(MAX(salary), 1) "최고임금", ROUND(MIN(salary), 1) "최저임금"
+FROM employees 
+GROUP BY job_id
+    HAVING ROUND(MIN(salary), 1) > 2500
+ORDER BY ROUND(AVG(salary), 0), ROUND(MIN(salary), 1) DESC; 
+-------------문제 6.
+SELECT employee_id, hire_date, TO_CHAR(hire_date, 'YYYY-MM-DD')
+FROM employees
+WHERE hire_date = (SELECT MIN(hire_date) FROM employees);
+
+
+
