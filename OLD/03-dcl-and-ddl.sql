@@ -154,3 +154,4 @@ SELECT constraint_name,
     search_condition
 FROM USER_CONSTRAINTS
 WHERE table_name = 'BOOK';
+

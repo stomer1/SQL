@@ -67,3 +67,99 @@ SELECT * FROM book_detail;
 
 UPDATE book_detail SET author_name='Unknown';
 -- 복합 뷰에서는 기본적으로 DML 수행할 수 없다
+
+-- VIEW 확인을 위한 DICTIONARY
+SELECT * FROM USER_VIEWS;
+-- 특정 view의 정보 확인을 위해 where절에 view_name을 지정하면 된다
+SElECT view_name, text FROM USER_VIEWS
+WHERE view_name = 'BOOK_DETAIL';
+
+-- INDEX : 검색 속도 개선을 위한 데이터베이스 객체
+-- hr.employees의 테이블을 기반으로 s_emp 생성
+CREATE TABLE s_emp
+    AS SELECT * FROM hr.employees;
+
+--s_emp 테이블의 employee_id 컬럼에 UNIQUE INDEX를 생성
+SELECT * FROM s_emp;
+CREATE UNIQUE INDEX s_emp_id_pk
+    ON s_emp (employee_id);
+    
+-- 사용자가 가지고 있는 인덱스를 확인
+SELECT * FROM USER_INDEXES;
+-- 어느 컬럼에 인덱스가 걸려있는지 확인
+SELECT * FROM USER_IND_COLUMNS;
+-- 두 테이블 조인, 어느 인덱스가 어느 컬럼에 있는지 확인
+SELECT t.index_name, 
+    t.table_name,
+    c.column_name, c.column_position
+FROM USER_INDEXES t, USER_IND_COLUMNS c
+WHERE t.index_name = c.index_name AND
+    t.table_name = 's_EMP';
+
+-- 인덱스 제거
+DROP INDEX s_emp_id_pk;
+SELECT * FROM USER_INDEXES;
+
+--SEQUENCE
+-- author 테이블에 새 레코드 삽입
+DESC author;
+SELECT * FROM author;
+
+SELECT MAX(author_id) FROM author;
+
+INSERT INTO auther(author_id, author_name)
+    VALUES( (SELECT MAX(author_id) + 1 FROM author), 'Unknown');
+SELECT * FROM author;
+
+ROLLBACK;
+
+-- 시퀀스 생성
+SELECT MAX(author_id) + 1 FROM author;
+
+CREATE SEQUENCE seq_author_id
+    START WITH 3
+    INCREMENT BY 1
+    MINVALUE 1
+    MAXVALUE 1000000000
+    NOCACHE;
+
+
+INSERT INTO author (author_id, author_name)
+VALUES (seq_author_id.NEXTVAL, 'Steven King');
+
+SELECT * FROM author;
+COMMIT;
+
+CREATE SEQUENCE my_seq
+    START WITH 1
+    INCREMENT BY 1
+    MAXVALUE 10
+    NOCACHE;
+
+-- 새 시퀀스 생성
+SELECT my_seq.NEXTVAL FROM dual;
+SELECT my_seq.CURRVAL FROM dual;
+
+-- 시퀀스 수정
+ALTER SEQUENCE my_seq
+    INCREMENT BY 2
+    MAXVALUE 1000000;
+
+SELECT my_seq.CURRVAL FROM dual;
+SELECT my_seq.NEXTVAL FROM dual;
+
+-- 시퀀시를 위한 딕셔너리
+SELECT * FROM USER_SEQUENCES;
+
+SELECT * FROM USER_OBJECTS WHERE object_type='SEQUENCE';
+
+-- book_id를 위한 시퀀스도 추가 해보기
+SELECT MAX(book_id) FROM book;
+
+CREATE SEQUENCE seq_book_id
+    START WITH 3
+    MINVALUE 1
+    INCREMENT BY 1
+    MAXVALUE 1000000;
+
+SELECT * FROM USER_SEQUENCES;
