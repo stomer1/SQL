@@ -1,0 +1,6 @@
+CREATE USER c##bituser IDENTIFIED BY bituser;
+DROP USER c##bituser;
+CREATE USER c##bituser IDENTIFIED BY bituser;
+GRANT create session TO c##bituser;
+GRANT connect, resource TO c##bituser;
+ALTER USER c##bituser DEFAULT TABLESPACE USERS QUOTA unlimited ON USERS; 

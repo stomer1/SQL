@@ -1,0 +1,8 @@
+CREATE TABLE PHONE_BOOK (
+    id NUMBER(10),
+    name VARCHAR2(20) NOT NULL,
+    hp VARCHAR2(30) NOT NULL,
+    tel VARCHAR2(30) NOT NULL,
+    PRIMARY KEY (id)
+);
+  

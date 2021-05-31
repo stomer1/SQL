@@ -11,7 +11,7 @@ ALTER SESSION SET "_ORACLE_SCRIPT" = true;
 SELECT * FROM tab;
 -- 테이블의 구조 확인
 DESC employees;
-
+  
 ---------
 -- SELECT ~ FROM
 ----------
