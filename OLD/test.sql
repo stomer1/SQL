@@ -8,7 +8,6 @@ CREATE TABLE PHONE_BOOK (
 INSERT INTO phone_book (id, name, hp, tel)
 VALUES(1 , '고길동', '010-10**-23**', '02-43**-90**');
 
-
 INSERT INTO phone_book (id, name, hp, tel)
 VALUES(2 , '도우너', '010-55**-55**', '02-43**-90**');
 
@@ -22,3 +21,14 @@ INSERT INTO phone_book (id, name, hp, tel)
 VALUES(5 , '남승균', '010-98**-14**', '02-9**-98**');
 
 SELECT * FROM phone_book;
+
+DROP SEQUENCE SEQ_PHONE_BOOK_PK;
+
+CREATE SEQUENCE SEQ_PHONE_BOOK_PK
+    START WITH 6
+    MINVALUE 1
+    MAXVALUE 100000000
+    INCREMENT BY 1
+    NOCACHE;
+    
+SELECT SEQ_PHONE_BOOK_PK.currval FROM dual;
